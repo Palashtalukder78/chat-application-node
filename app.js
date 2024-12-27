@@ -1,8 +1,15 @@
+//External Error
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+
+//Internam Error
+const {
+  notfoundHandler,
+  errorHandler,
+} = require("./middlewares/common/errorhandler");
 
 const app = express();
 dotenv.config();
@@ -28,7 +35,10 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 //routing setup
 
-//Error handling
+//404 not found handler
+app.use(notfoundHandler);
+//common error Handler
+app.use(errorHandler);
 
 //app listening
 app.listen(process.env.PORT, () => {
