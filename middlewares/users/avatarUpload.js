@@ -7,18 +7,20 @@ function avatarUpload(req, res, next) {
     1000000,
     "Only jpeg,jpg,png format allowed!"
   );
-
+  console.log("Checking request headers:", req.headers);
   //call the middleware function
   upload.any()(req, res, (err) => {
+    console.log(req.body);
     if (err) {
       res.status(500).json({
         errors: {
-          avatars: {
+          avatar: {
             msg: err.message,
           },
         },
       });
     } else {
+      console.log("File upload successful, proceeding to next middleware.");
       next();
     }
   });

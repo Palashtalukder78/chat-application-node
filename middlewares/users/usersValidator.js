@@ -2,7 +2,8 @@ const { check, validationResult } = require("express-validator");
 const createError = require("http-errors");
 const path = require("path");
 const { unlink } = require("fs");
-
+// internal imports
+const User = require("../../models/People");
 const addUserValidator = [
   check("name")
     .isLength({ min: 1 })
@@ -56,6 +57,7 @@ const addUserValidationHandler = (req, res, next) => {
     //remove uploaded file
     if (req.files.length > 0) {
       const { fileName } = req.files[0];
+      console.log(fileName);
       unlink(
         path.join(__dirname, `/../public/uploads/avatars/${fileName}`),
         (err) => {
@@ -66,13 +68,10 @@ const addUserValidationHandler = (req, res, next) => {
       );
     }
   }
-  //Response the error
-  res.status(
-    500,
-    json({
-      errors: mappedErrors,
-    })
-  );
+  // response the errors
+  res.status(500).json({
+    errors: mappedErrors,
+  });
 };
 
 module.exports = { addUserValidator, addUserValidationHandler };

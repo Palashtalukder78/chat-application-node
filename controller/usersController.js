@@ -1,8 +1,22 @@
+const bcrypt = require("bcrypt");
+// internal imports
+const User = require("../models/People");
+
 //Get Users page
-function getUsers(req, res, next) {
-  res.render("users");
+async function getUsers(req, res, next) {
+  // res.render("users");
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    next(err);
+  }
 }
+
 async function addUser(req, res, next) {
+  console.log("Request Files:", req.files);
+  console.log("Request Body:", req.body);
+
   let newUser;
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   if (req.files && req.files.length > 0) {
@@ -33,4 +47,4 @@ async function addUser(req, res, next) {
     });
   }
 }
-module.exports = { getUsers };
+module.exports = { getUsers, addUser };

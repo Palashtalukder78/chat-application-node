@@ -14,6 +14,7 @@ function uploader(
   //Define the storage
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
+      console.log("Setting upload destination...");
       cb(null, UPLOADS_FOLDER);
     },
     filename: (req, file, cb) => {
@@ -34,8 +35,9 @@ function uploader(
   //Prepare the final multer upload object
   const upload = multer({
     storage: storage,
-    limits: max_file_size,
+    limits: { fileSize: max_file_size },
     fileFilter: (req, file, cb) => {
+      console.log("Checking file type:", file.mimetype);
       if (allowed_file_types.includes(file.mimetype)) {
         cb(null, true);
       } else {
